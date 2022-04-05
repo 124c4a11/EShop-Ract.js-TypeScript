@@ -1,11 +1,22 @@
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
 import { IProduct } from '../../interfaces/IProduct';
-import { Badge, IconButton, Rating } from '@mui/material';
+import {
+  Badge,
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  IconButton,
+  Rating,
+  Typography
+} from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { addProductToCart } from '../../store/reducers/cartReducer/cartReducer';
+import { getCart, getProductQuantityInCartById } from '../../store/reducers/cartReducer/cartSelectors';
+import { IOrderProduct } from '../../interfaces/IOrderProduct';
+import { useEffect } from 'react';
+import { saveCartToLocalStorage } from '../../helpers/cartLocalStorage';
 
 
 interface ProductCardProps {
@@ -14,13 +25,36 @@ interface ProductCardProps {
 }
 
 
-export function ProductCard({ product, component = 'div' }: ProductCardProps) {
+export function ProductCard({
+  product,
+  component = 'div'
+}: ProductCardProps): JSX.Element {
   const {
+    id,
     image,
     title,
     price,
     rating,
   } = product;
+  const dispatch = useAppDispatch();
+  const quantity = useAppSelector(getProductQuantityInCartById(id));
+  const cart = useAppSelector(getCart);
+
+  useEffect(() => {
+    saveCartToLocalStorage(cart);
+  }, [cart]);
+
+  function addToCart() {
+    const cartProduct: IOrderProduct = {
+      id,
+      title,
+      image,
+      price,
+      quantity: 1
+    }
+
+    dispatch(addProductToCart(cartProduct));
+  }
 
   return (
     <Card
@@ -41,7 +75,7 @@ export function ProductCard({ product, component = 'div' }: ProductCardProps) {
       <CardContent sx={{ flexGrow: 1 }}>
         <Typography
           gutterBottom
-          component="h3"
+          component="h2"
           variant="body1"
           fontWeight={500}
         >{title}</Typography>
@@ -53,8 +87,12 @@ export function ProductCard({ product, component = 'div' }: ProductCardProps) {
           variant="h6"
           fontWeight={600}
         >{price} $</Typography>
-        <IconButton color="primary" aria-label="add to shopping cart">
-          <Badge badgeContent={1} color="error">
+        <IconButton
+          color="primary"
+          aria-label="add to shopping cart"
+          onClick={addToCart}
+        >
+          <Badge badgeContent={quantity} color="error">
             <AddShoppingCartIcon />
           </Badge>
         </IconButton>

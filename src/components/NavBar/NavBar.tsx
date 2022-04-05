@@ -7,46 +7,51 @@ import Badge from '@mui/material/Badge';
 import { ShoppingCart } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
-
-interface NavBarProps {
-  productsAmout?: number;
-}
+import { useAppSelector } from '../../hooks/reduxHooks';
+import { getTotalProductQuantityInCart } from '../../store/reducers/cartReducer/cartSelectors';
 
 
-export function NavBar({ productsAmout = 0 }: NavBarProps) {
+
+export function NavBar(): JSX.Element {
+  const quantity = useAppSelector(getTotalProductQuantityInCart);
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography
-            component={Link}
-            to="/"
-            variant="h6"
-            noWrap
-            sx={{
-              color: "white",
-              textDecoration: "none",
-            }}
-          >
-            EShop
-          </Typography>
+    <AppBar
+      sx={{
+        borderBottom: '1px solid #E7EBF0',
+        backdropFilter: 'blur(20px)',
+        boxShadow: 'none',
+        backgroundColor: 'rgba(255,255,255,0.7)',
+      }}
+    >
+      <Toolbar>
+        <Typography
+          component={Link}
+          to="/"
+          variant="h6"
+          noWrap
+          color="inherit"
+          sx={{
+            color: 'primary.main',
+            textDecoration: 'none',
+          }}
+        >EShop</Typography>
 
-          <Box sx={{ flexGrow: 1 }} />
-          <Box>
-            <IconButton
-              component={Link}
-              to="/cart"
-              size="large"
-              aria-label="move to cart"
-              color="inherit"
-            >
-              <Badge badgeContent={productsAmout} color="error">
-                <ShoppingCart />
-              </Badge>
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </Box>
+        <Box sx={{ flexGrow: 1 }} />
+        <Box>
+          <IconButton
+            component={Link}
+            to="/cart"
+            size="large"
+            aria-label="move to cart"
+            color="primary"
+          >
+            <Badge badgeContent={quantity} color="error">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

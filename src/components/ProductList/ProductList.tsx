@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+
 import { ProductCard } from '..';
 import { IProduct } from '../../interfaces/IProduct';
 
@@ -17,6 +18,7 @@ export function ProductList({ items }: ProductListProps): JSX.Element {
       gap="15px"
       component="ul"
       pl="0"
+      my="0"
     >
       {
         items.map((product) => <ProductCard

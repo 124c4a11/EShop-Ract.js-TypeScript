@@ -6,6 +6,8 @@ import { NavBar } from '..';
 import { BrowserRouter } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks/reduxHooks';
 import { productsFetchRequest } from '../../store/reducers/productsReducer/productsReducer';
+import { setCart } from '../../store/reducers/cartReducer/cartReducer';
+import { getCartFromLocalStorage } from '../../helpers/cartLocalStorage';
 
 
 function App() {
@@ -13,12 +15,16 @@ function App() {
 
   useEffect(() => {
     dispatch(productsFetchRequest());
+
+    const cart = getCartFromLocalStorage();
+
+    if (cart) dispatch(setCart(cart));
   }, [dispatch]);
 
   return (
     <BrowserRouter>
-      <NavBar productsAmout={0} />
-      <Container>
+      <NavBar />
+      <Container sx={{ pt: 12, pb: 10 }}>
         <AppRouter />
       </Container>
     </BrowserRouter>

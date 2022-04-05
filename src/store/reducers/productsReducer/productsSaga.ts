@@ -1,4 +1,4 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLeading } from 'redux-saga/effects';
 
 import { getProducts } from '../../../API/getProducts';
 import { IProduct } from '../../../interfaces/IProduct';
@@ -22,6 +22,6 @@ function* fetchProducts() {
 
 export function* productsSaga() {
   yield all([
-    takeLatest('products/productsFetchRequest', fetchProducts)
+    takeLeading('products/productsFetchRequest', fetchProducts)
   ]);
 }
