@@ -2,7 +2,9 @@
 
 ## Used Technologies
 
-* React.js (TypeScript)
+* React.js
+* TypeScript
+* React Router
 * Redux Toolkit
 * Redux Saga
 * Material UI
